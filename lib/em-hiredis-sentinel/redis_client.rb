@@ -338,10 +338,9 @@ module EventMachine::Hiredis::Sentinel
             o = o.prepend('redis://') if !o.include? '://'
             o = URI.parse(o)
         end
-
-        ret << { :host => o.host, :port => o.port || 26379 }
+        ret << { :host => o[:host], :port => o[:port] || 26379 } if o.is_a?(Hash) && o.key?(:host)
+        ret << { :host => o.host, :port => o.port || 26379 } if o.is_a?(URI)
       end
-
       ret
     end
   end
